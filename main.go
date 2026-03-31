@@ -64,9 +64,9 @@ func main() {
 		}
 	}
 
-	mux.HandleFunc("/healthz", healthz)
-	mux.HandleFunc("/metrics", apiCfg.metrics())
-	mux.HandleFunc("/reset", apiCfg.reset())
+	mux.HandleFunc("GET /healthz", healthz)
+	mux.HandleFunc("GET /metrics", apiCfg.metrics())
+	mux.HandleFunc("POST /reset", apiCfg.reset())
 
 	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 		// Error starting or closing listener:
