@@ -33,4 +33,4 @@ go.work.sum
 
 # testing files
 request.http
-db_string
+.env
