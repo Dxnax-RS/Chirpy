@@ -6,6 +6,8 @@ import(
 	"errors"
 	"strings"
 	"net/http"
+	"crypto/rand"
+	"encoding/hex"
 	"github.com/alexedwards/argon2id"
 	"github.com/google/uuid"
 	"github.com/golang-jwt/jwt/v5"
@@ -79,6 +81,26 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error){
 
 func GetBearerToken(headers http.Header) (string, error){
 	rep := strings.NewReplacer("Bearer ", "")
+	token := headers.Get("Authorization")
+
+	if token == ""{
+		return "", errors.New("Authorization header not found")
+	}
+
+	token = rep.Replace(token)
+
+	return token, nil
+}
+
+func MakeRefreshToken() string{
+	key := make([]byte, 32)
+	rand.Read(key)
+	encodedStr := hex.EncodeToString(key)
+	return encodedStr
+}
+
+func GetAPIKey(headers http.Header) (string, error){
+	rep := strings.NewReplacer("ApiKey ", "")
 	token := headers.Get("Authorization")
 
 	if token == ""{
